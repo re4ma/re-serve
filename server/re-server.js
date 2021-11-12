@@ -33,7 +33,6 @@ const TMP_NAME = 're4ma.tmp.json';
 export class ReServer {
 
   constructor() {
-    this.port = 9000;
     this._server = http.createServer((request, response) => {
       if (request.method === 'POST') {
         let data = [];
@@ -52,6 +51,7 @@ export class ReServer {
             }
             if (!tmp.links.includes(reCall.href)) {
               tmp.links.push(reCall.href);
+              console.log('Link added: ' + reCall.href);
             }
             fs.writeFileSync(TMP_NAME, JSON.stringify(tmp, undefined, 2));
           } else if (reCall.type === 'save') {
@@ -82,6 +82,7 @@ export class ReServer {
               });
             }
             fs.writeFileSync(filePath, reCall.html);
+            console.log('Saved: ' + filePath);
           }
         });
         return;
@@ -117,7 +118,9 @@ export class ReServer {
   start() {
     this.cfg = getCfg();
     console.log(this.cfg);
-    this._server.listen(this.cfg.localPort || this.port);
+    this.port = this.cfg.localPort || 9000;
+    this._server.listen(this.port);
+    console.log(`http://localhost:${this.port}/`);
   }
 
   stop() {
