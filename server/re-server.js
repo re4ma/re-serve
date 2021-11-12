@@ -66,6 +66,13 @@ export class ReServer {
               path = path.replace('/', '');
             }
             let filePath = outDir + reCall.path;
+            if (!filePath.includes('.htm')) {
+              filePath += 'index.html';
+            }
+            if (filePath.includes('//')) {
+              // @ts-ignore
+              filePath = filePath.replaceAll('//', '/');
+            }
             let dirPathArr = filePath.split('/');
             dirPathArr.pop();
             let dirPath = dirPathArr.join('/');
