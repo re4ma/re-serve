@@ -57,10 +57,24 @@ export class ReServer {
           } else if (reCall.type === 'save') {
             /** @type {String} */
             let outDir = this.cfg.output;
+            /** @type {String} */
+            let path = reCall.path;
             if (!outDir.endsWith('/')) {
               outDir += '/';
             }
-            fs.writeFileSync(outDir + reCall.path, reCall.html);
+            if (path.startsWith('/')) {
+              path = path.replace('/', '');
+            }
+            let filePath = outDir + reCall.path;
+            let dirPathArr = filePath.split('/');
+            dirPathArr.pop();
+            let dirPath = dirPathArr.join('/');
+            if (!fs.existsSync(dirPath)) {
+              fs.mkdirSync(dirPath, {
+                recursive: true,
+              });
+            }
+            fs.writeFileSync(filePath, reCall.html);
           }
         });
         return;
