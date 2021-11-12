@@ -85,6 +85,8 @@ export class ReServer {
             console.log('Saved: ' + filePath);
           }
         });
+        response.statusCode = 200;
+        response.end();
         return;
       }
       let parsedUrl = url.parse(request.url);
